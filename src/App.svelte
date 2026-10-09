@@ -22,10 +22,11 @@
 </svelte:head>
 
 <a class="skip-link" href="#collection">Skip to collection</a>
-<div class="page-shell">
+<div class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat" style:background-image={`url("${import.meta.env.BASE_URL}images/bg.jpg")`} aria-hidden="true"></div>
+<div class="mx-auto min-h-screen max-w-[1240px] bg-[#faf8f3]/90 px-[48px] max-[1050px]:px-[30px] max-[500px]:px-[21px]">
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Stuff I like home"><span class="brand-icon">✳</span> stuff i like<span class="brand-period">.</span></a>
-    <a class="collection-link" href="#collection">The collection <span aria-hidden="true">↗</span></a>
+    <div class="brand" aria-label="Stuff i think is cool.">
+    </div>
   </header>
 
   <main>
@@ -41,7 +42,7 @@
 
     <section id="collection" aria-labelledby="collection-heading">
       <div class="collection-heading"><div><p class="eyebrow">THE GOOD STUFF</p><h2 id="collection-heading">A shelf of favorites <span>{favorites.length.toString().padStart(2, '0')}</span></h2></div><p class="sample-label">{profile.isDemo ? 'A sample collection. Make it yours.' : 'A few things worth coming back to.'}</p></div>
-      <div class="toolbar">
+      <div class="mt-[29px] flex items-center justify-between gap-[20px] max-[1050px]:flex-col max-[1050px]:items-start max-[1050px]:gap-[14px] max-[500px]:mt-[23px]">
         <div class="categories" aria-label="Filter by category">
           {#each categories as name}
             <button class:active={category === name} aria-pressed={category === name} onclick={() => category = name}>{name}{#if name === 'Everything'}<span>{favorites.length}</span>{/if}</button>
@@ -50,7 +51,7 @@
         <label class="search"><span aria-hidden="true">⌕</span><input aria-label="Search favorites" type="search" bind:value={query} placeholder="Find something good…" /></label>
       </div>
       <div class="results-bar"><p aria-live="polite">{visible.length} {visible.length === 1 ? 'favorite' : 'favorites'}{category !== 'Everything' ? ` in ${category.toLowerCase()}` : ' to explore'}</p><label>Sort by <select aria-label="Sort favorites" bind:value={sort}><option value="curated">Curated order</option><option value="alphabetical">Name: A–Z</option></select></label></div>
-      <div class="grid">
+      <div class="grid grid-cols-3 gap-[25px] max-[1050px]:gap-[16px] max-[760px]:grid-cols-2 max-[500px]:grid-cols-1 max-[500px]:gap-[22px]">
         {#each visible as item}
           <article class="card">
             <div class="art {item.art}" aria-hidden="true"><span class="art-label">{item.category} / {item.year}</span><div class="art-composition"><span class="art-glyph">{item.glyph}</span><span class="art-title">{item.title}</span><span class="art-creator">{item.creator}</span></div><span class="art-index">NO. {(favorites.indexOf(item) + 1).toString().padStart(2, '0')}</span></div>
