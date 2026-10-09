@@ -23,7 +23,7 @@
 
 <a class="skip-link" href="#collection">Skip to collection</a>
 <div class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat" style:background-image={`url("${import.meta.env.BASE_URL}images/bg.jpg")`} aria-hidden="true"></div>
-<div class="mx-auto min-h-screen max-w-[1240px] bg-[#faf8f3]/90 px-[48px] max-[1050px]:px-[30px] max-[500px]:px-[21px]">
+<div class="mx-auto min-h-screen max-w-[1240px] px-[48px] max-[1050px]:px-[30px] max-[500px]:px-[21px]">
   <header class="site-header">
     <div class="brand" aria-label="Stuff i think is cool.">
     </div>
