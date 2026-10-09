@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { favorites, profile } from './lib/favorites'
+  import { favorites, profile, socialLinks } from './lib/favorites'
 
   let category = $state('Everything')
   let query = $state('')
@@ -17,52 +17,60 @@
 </script>
 
 <svelte:head>
-  <title>{profile.title} — A personal collection</title>
+  <title>Stuff I like</title>
   <meta name="description" content={profile.intro} />
 </svelte:head>
 
 <a class="skip-link" href="#collection">Skip to collection</a>
-<div class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat" style:background-image={`url("${import.meta.env.BASE_URL}images/bg.jpg")`} aria-hidden="true"></div>
+<div class="fixed -inset-[6px] -z-10 bg-cover bg-center bg-no-repeat blur-[3px]" style:background-image={`url("${import.meta.env.BASE_URL}images/bg.jpg")`} aria-hidden="true"></div>
 <div class="mx-auto min-h-screen max-w-[1240px] px-[48px] max-[1050px]:px-[30px] max-[500px]:px-[21px]">
-  <header class="site-header">
+  <header id="page-title" class="site-header">
     <div class="brand" aria-label="Stuff i think is cool.">
+        Collection of stuff i find cool
     </div>
+    {#if socialLinks.length > 0}
+      <nav class="social-links" aria-label="Social media">
+        {#each socialLinks as social}
+          <a href={social.url} target="_blank" rel="noopener noreferrer" aria-label={`${social.label} (opens in a new tab)`}>
+            {social.label}
+          </a>
+        {/each}
+      </nav>
+    {/if}
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span></span> A PERSONAL CORNER OF THE INTERNET</p>
-        <h1 id="page-title">{profile.title}<span class="title-star" aria-hidden="true">✳</span></h1>
-        <p class="intro">{profile.intro}</p>
-        <div class="hero-meta"><span class="tiny-heart" aria-hidden="true">♡</span> Collected with care <span class="dot">·</span> Always a work in progress</div>
-      </div>
-      <div class="hero-note" aria-hidden="true"><span class="tape"></span><span class="note-star">✧</span><p>Good things<br />are better<br /><em>shared.</em></p><span class="note-sign">a small reminder ↗</span></div>
-    </section>
-
-    <section id="collection" aria-labelledby="collection-heading">
-      <div class="collection-heading"><div><p class="eyebrow">THE GOOD STUFF</p><h2 id="collection-heading">A shelf of favorites <span>{favorites.length.toString().padStart(2, '0')}</span></h2></div><p class="sample-label">{profile.isDemo ? 'A sample collection. Make it yours.' : 'A few things worth coming back to.'}</p></div>
+    <section id="collection" aria-label="Collection">
       <div class="mt-[29px] flex items-center justify-between gap-[20px] max-[1050px]:flex-col max-[1050px]:items-start max-[1050px]:gap-[14px] max-[500px]:mt-[23px]">
         <div class="categories" aria-label="Filter by category">
           {#each categories as name}
-            <button class:active={category === name} aria-pressed={category === name} onclick={() => category = name}>{name}{#if name === 'Everything'}<span>{favorites.length}</span>{/if}</button>
+            <button class:active={category === name} aria-pressed={category === name} onclick={() => category = name}>{name}</button>
           {/each}
         </div>
         <label class="search"><span aria-hidden="true">⌕</span><input aria-label="Search favorites" type="search" bind:value={query} placeholder="Find something good…" /></label>
       </div>
-      <div class="results-bar"><p aria-live="polite">{visible.length} {visible.length === 1 ? 'favorite' : 'favorites'}{category !== 'Everything' ? ` in ${category.toLowerCase()}` : ' to explore'}</p><label>Sort by <select aria-label="Sort favorites" bind:value={sort}><option value="curated">Curated order</option><option value="alphabetical">Name: A–Z</option></select></label></div>
-      <div class="grid grid-cols-3 gap-[25px] max-[1050px]:gap-[16px] max-[760px]:grid-cols-2 max-[500px]:grid-cols-1 max-[500px]:gap-[22px]">
+      <div class="results-bar"><p aria-live="polite"></p><label>Sort by <select aria-label="Sort favorites" bind:value={sort}><option value="curated">Added order</option><option value="alphabetical">Name</option></select></label></div>
+      <ul class="favorites-list" aria-label="Favorites">
         {#each visible as item}
-          <article class="card">
-            <div class="art {item.art}" aria-hidden="true"><span class="art-label">{item.category} / {item.year}</span><div class="art-composition"><span class="art-glyph">{item.glyph}</span><span class="art-title">{item.title}</span><span class="art-creator">{item.creator}</span></div><span class="art-index">NO. {(favorites.indexOf(item) + 1).toString().padStart(2, '0')}</span></div>
-            <div class="card-body"><div class="card-meta"><span>{item.category}</span><span>{item.year}</span></div><h3>{item.title}</h3><p class="creator">{item.creator}</p><p class="note">{item.note}</p><div class="card-bottom"><span><span class="little-star" aria-hidden="true">✦</span> Worth coming back to</span>{#if item.url}<a href={item.url} target="_blank" rel="noreferrer" aria-label={`Explore ${item.title} (opens in a new tab)`}>Explore <span aria-hidden="true">↗</span></a>{/if}</div></div>
-          </article>
+          <li class="favorite-row">
+            <div class="min-w-0">
+              <h2 class="favorite-title">
+                {#if item.url}
+                  <a href={item.url} target="_blank" rel="noreferrer" aria-label={`Explore ${item.title} (opens in a new tab)`}>{item.title} <span class="text-[#9ec5f5]" aria-hidden="true">↗</span></a>
+                {:else}
+                  {item.title}
+                {/if}
+              </h2>
+              <p class="favorite-creator">{item.creator}</p>
+              <p class="favorite-note">{item.note}</p>
+            </div>
+            <div class="favorite-details"><span>{item.category}</span><span>{item.year}</span></div>
+          </li>
         {:else}
-          <div class="empty"><span aria-hidden="true">✧</span><h3>No favorites found</h3><p>Try a different search or explore the whole collection.</p><button onclick={reset}>Show everything</button></div>
+          <li class="empty"><h2>No favorites found</h2><p>Try a different search or explore the whole collection.</p><button onclick={reset}>Show everything</button></li>
         {/each}
-      </div>
+      </ul>
     </section>
-    <aside class="closing"><span aria-hidden="true">✳</span><p>Nothing here is an algorithm’s pick.<br /><em>Just things worth loving.</em></p></aside>
   </main>
-  <footer><span>stuff i like. <span class="footer-muted">A little more human, a little less feed.</span></span><a href="#page-title">Back to top ↑</a></footer>
+  <footer><a href="#page-title">Back to top</a></footer>
 </div>

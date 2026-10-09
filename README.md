@@ -1,6 +1,6 @@
 # Stuff I like
 
-A personal favorites shelf built with Svelte 5, TypeScript, and Vite. Responsive cards, category filters, live search, alphabetical sorting, and a GitHub Pages workflow are included.
+A personal favorites shelf built with Svelte 5, TypeScript, and Vite. A responsive list, category filters, live search, alphabetical sorting, and a GitHub Pages workflow are included.
 
 ## Run locally
 
@@ -13,7 +13,7 @@ npm run dev
 
 Edit `src/lib/favorites.ts`: update the profile title and intro, replace the sample favorites, and set `isDemo` to `false`. Categories are generated from the entries. Each item has a title, category, creator, note, year, art style, decorative glyph, and optional external URL (use an empty string for no link).
 
-Available art styles: `prince`, `rainbows`, `spirited`, `stardew`, `morning`, and `budapest`. These are original CSS illustrations, not official covers. Customize styles in `src/app.css` or add your own styles. No account or backend is needed. Google Fonts is used with local serif/sans-serif fallbacks.
+Available art styles: `prince`, `rainbows`, `spirited`, `stardew`, `morning`, and `budapest`. These are original CSS illustrations, not official covers. Customize styles in `src/app.css` or add your own styles. No account or backend is needed. The site self-hosts EX Mils Medium and Medium Oblique from public/fonts, with a sans-serif fallback. Font faces are configured in src/app.css.
 
 ## Check and build
 
